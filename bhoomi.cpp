@@ -3,123 +3,143 @@
 #include <string>
 using namespace std;
 
-class Student {
+class Student
+{
 public:
-    int age, rollNo, classesAttended;
-    string name;
-    float marks;
-    static const int totalClasses = 32;
+    int age, reg_no, roll_no, semester, attendance;
+    string name, parentage;
+    int marks[5];
+    float percentage, totalMarks;
 
-    void showDetails() {
-        cout << "Name: " << name << ", Roll No: " << rollNo << ", Age: " << age << endl;
-        cout << "Attendance: " << classesAttended << "/" << totalClasses << ", Marks: " << marks << "/100" << endl;
-    }
-
-    float getAttendancePercentage() {
-        return (float)classesAttended / totalClasses * 100;
-    }
-};
-
-class StudentData {
 public:
-    Student studentList[5];
-    int studentCount = 0;
-
-    void addStudent(Student s) {
-        if (studentCount < 5) {
-            studentList[studentCount] = s;
-            studentCount++;
-        } else {
-            cout << "Max student limit reached.\n";
+    void get_details()
+    {
+        cout << "Enter name: ";
+        cin >> name;
+        cout << "Enter age: ";
+        cin >> age;
+        cout << "Enter registration number: ";
+        cin >> reg_no;
+        cout << "Enter parentage: ";
+        cin >> parentage;
+        cout << "Enter semester: ";
+        cin >> semester;
+        cout << "Enter roll number: ";
+        cin >> roll_no;
+        cout << "Enter attendance (no of classes attended): ";
+        cin >> attendance;
+        cout << "Enter marks in 5 subjects: ";
+        for (int i = 0; i < 5; i++)
+        {
+            cin >> marks[i];
         }
     }
 
-    void showAllDetails() {
-        for (int i = 0; i < studentCount; i++) {
-            studentList[i].showDetails();
-            cout << "--------------------------" << endl;
+    void show_details()
+    {
+        cout << "Name: " << name << endl;
+        cout << " Age: " << age << endl;
+        cout << " Reg No: " << reg_no << endl;
+        cout << " Parentage: " << parentage << endl;
+        cout << " Semester: " << semester << endl;
+        cout << " Roll No: " << roll_no << endl;
+        cout << " Attendance: " << attendance << endl;
+        cout << " Percentage: " << percentage << "%" << endl;
+    }
+
+    void show_name()
+    {
+        cout << name;
+    }
+
+    void show_rollno()
+    {
+        cout << "Roll No: " << roll_no << endl;
+    }
+
+    void show_attendance()
+    {
+        cout << "Attendance: " << attendance << " classes" << endl;
+    }
+
+    void show_shortage()
+    {
+        if (attendance < 75)
+        {
+            cout << name << "   has low attendance(shortage): " << attendance << " classes" << endl;
+        }
+        else
+        {
+            cout << "No Shortage" << endl;
         }
     }
 
-    void showAttendance() {
-        for (int i = 0; i < studentCount; i++) {
-            cout << "Roll No: " << studentList[i].rollNo << ", Name: " << studentList[i].name
-                 << ", Attendance: " << studentList[i].classesAttended << endl;
+    void cal_percentage()
+    {
+        totalMarks = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            totalMarks = totalMarks + marks[i];
+        }
+        percentage = ((totalMarks / 500.0) * 100);
+        if (percentage >= 90)
+        {
+            cout << "percentage is above 90 %" << endl;
+        }
+        else
+        {
+            cout << "percentage is below 90 %" << endl;
         }
     }
 
-    void showShortage() {
-        cout << "Students with less than 75% attendance:" << endl;
-        for (int i = 0; i < studentCount; i++) {
-            if (studentList[i].getAttendancePercentage() < 75) {
-                cout << "Roll No: " << studentList[i].rollNo << ", Name: " << studentList[i].name
-                     << ", Attendance Percentage: " << studentList[i].getAttendancePercentage() << "%" << endl;
-            }
-        }
-    }
+    void top_5(Student students[], int n)
+    {
+        int temp;
+        for (int i = 0; i < n - 1; i++)
+        {
 
-    void showTop5() {
-        for (int i = 0; i < studentCount - 1; i++) {
-            for (int j = i + 1; j < studentCount; j++) {
-                if (studentList[i].marks < studentList[j].marks) {
-                    Student temp = studentList[i];
-                    studentList[i] = studentList[j];
-                    studentList[j] = temp;
+            for (int j = 0; j < n - i - 1; j++)
+            {
+                if (students[j].totalMarks < students[j + 1].totalMarks)
+                {
+                    temp = students[j].totalMarks;
+                    students[j].totalMarks = students[j + 1].totalMarks;
+                    students[j + 1].totalMarks = temp;
                 }
             }
         }
-        cout << "Top 5 Students by Marks:" << endl;
-        for (int i = 0; i < 5 && i < studentCount; i++) {
-            cout << "Roll No: " << studentList[i].rollNo << ", Name: " << studentList[i].name
-                 << ", Marks: " << studentList[i].marks << endl;
-        }
-    }
-
-    void showHighAttendance() {
-        cout << "Students with 90% or higher attendance:" << endl;
-        for (int i = 0; i < studentCount; i++) {
-            if (studentList[i].getAttendancePercentage() >= 90) {
-                cout << "Roll No: " << studentList[i].rollNo << ", Name: " << studentList[i].name
-                     << ", Attendance Percentage: " << studentList[i].getAttendancePercentage() << "%" << endl;
-            }
+        cout << "Top 5 Students are : " << endl;
+        for (int i = 0; i < 5; i++)
+        {
+            students[i].show_name();
+            cout << " - " << students[i].totalMarks << endl;
         }
     }
 };
 
-int main() {
-    StudentData studentData;
-    int numStudents = 5;
-    for (int i = 0; i < numStudents; i++) {
-        Student s;
-        cout << "\nEnter details for Student " << i + 1 << ":\n";
-        cout << "Name: "; cin >> ws; getline(cin, s.name);
-        cout << "Roll Number: "; cin >> s.rollNo;
-        cout << "Age: "; cin >> s.age;
-        cout << "Classes Attended: "; cin >> s.classesAttended;
-        cout << "Marks (out of 100): "; cin >> s.marks;
-        studentData.addStudent(s);
+int main()
+{
+    Student students[100];
+    int noStudent = 0;
+    cout << "Enter Number Of Students: ";
+    cin >> noStudent;
+    for (int i = 0; i < noStudent; i++)
+    {
+        cout << "Enter Details Of Student " << i + 1 << ":" << endl;
+        students[i].get_details();
     }
-    int choice;
-    do {
-        cout << "\nMenu:\n";
-        cout << "1. Show All Student Details\n";
-        cout << "2. Show Attendance Details\n";
-        cout << "3. Show Students with Attendance Shortage (<75%)\n";
-        cout << "4. Show Top 5 Students by Marks\n";
-        cout << "5. Show Students with 90% or Higher Attendance\n";
-        cout << "0. Exit\n";
-        cout << "Enter your choice: "; cin >> choice;
 
-        switch (choice) {
-            case 1: studentData.showAllDetails(); break;
-            case 2: studentData.showAttendance(); break;
-            case 3: studentData.showShortage(); break;
-            case 4: studentData.showTop5(); break;
-            case 5: studentData.showHighAttendance(); break;
-            case 0: cout << "Exiting program.\n"; break;
-            default: cout << "Invalid choice. Please try again.\n";
-        }
-    } while (choice != 0);
+    for (int i = 0; i < noStudent; i++)
+    {
+        cout << "\n"
+             << "Details Of Student :";
+        students[i].cal_percentage();
+        students[i].show_details();
+        students[i].show_name();
+        students[i].show_shortage();
+    }
+
+    students[0].top_5(students, noStudent);
 
     return 0;
 }
